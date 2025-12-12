@@ -6,30 +6,22 @@
 <img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
 <img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
 <img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
 
 ### Papéis dos Contribuidores
 - **Allan Carvalho de Aguiar**
-  - Pesquisa do código responsável pela tela de desbloqueio
-  - Desenvolvimento das alterações em Java
-  - Documentação da atividade
+  - Engenheiro de Animação e Gráficos
 
-- **Desenvolvedor 2**
-  - Pesquisa do código responsável pela tela de desbloqueio
-  - Desenvolvimento das alterações em Java
-  - Documentação da atividade
+- **Elian da Rocha Pinheiro**
+  - Arquiteto de Framework
 
-- **Desenvolvedor 3**
-  - Desenvolvimento das alterações em Java
-  - Aplicação de patches e testes
+- **Icaro Farias da Gama**
+  - Engenheiro de Integração e Hardware
 
-- **Desenvolvedor 4**
-  - Desenvolvimento das alterações em Java
-  - Aplicação de patches e testes
+- **Paulo Vitor de Castro Freitas**
+  - Engenheiro de Serviço de Sistema
 
-- **Desenvolvedor 5**
-  - Pesquisa do código responsável pela tela de desbloqueio
-  - Documentação da atividade
+- **Rayron da Costa Magalhães**
+  - Engenheiro de Build e Infraestrutura
 
 ## Scripts de Automação e Workflow
 
