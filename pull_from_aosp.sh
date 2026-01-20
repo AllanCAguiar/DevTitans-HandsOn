@@ -30,3 +30,5 @@ echo "-----------------------------------------------------"
 rsync -avh --progress --existing --update "${EXCLUDES[@]}" "$AOSP_DIR/" "$MODS_DIR/"
 
 echo "Sincronização reversa concluída."
+
+#elianEsteveAqui
