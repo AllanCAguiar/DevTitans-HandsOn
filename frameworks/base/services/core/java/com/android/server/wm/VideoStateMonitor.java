@@ -1,11 +1,13 @@
 package com.android.server.wm;
 
+import static android.view.Display.DEFAULT_DISPLAY;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.Handler;
+import android.view.WindowManager;
 import java.util.List;
 
 /**
@@ -17,23 +19,14 @@ public class VideoStateMonitor {
     private final WindowManagerService mWms;
     private MediaSessionManager mMediaSessionManager;
     private AudioManager mAudioManager;
-
     private boolean mIsVideoPlaying = false;
 
-    // Listener para mudanças na sessão de mídia
     private final MediaSessionManager.OnActiveSessionsChangedListener mSessionListener = 
-            new MediaSessionManager.OnActiveSessionsChangedListener() {
-        @Override
-        public void onActiveSessionsChanged(List<MediaController> controllers) {
-            recalculateVideoState(controllers);
-        }
-    };
+            controllers -> recalculateVideoState(controllers);
 
     public VideoStateMonitor(Context context, WindowManagerService wms) {
         mContext = context;
         mWms = wms;
-        // Inicialização dos serviços deve ser feita no onSystemReady ou similar
-        // para evitar null pointers durante o boot
     }
 
     public void onSystemReady() {
@@ -41,19 +34,15 @@ public class VideoStateMonitor {
         mAudioManager = mContext.getSystemService(AudioManager.class);
         
         if (mMediaSessionManager != null) {
-            // Monitorar sessões ativas (pode requerer permissão MEDIA_CONTENT_CONTROL)
             mMediaSessionManager.addOnActiveSessionsChangedListener(
-                mSessionListener, null, new Handler());
+                mSessionListener, null, mWms.mH);
         }
     }
 
-    /**
-     * O núcleo da heurística.
-     */
     private void recalculateVideoState(List<MediaController> controllers) {
         boolean mediaPlaying = false;
 
-        // 1. Verifica MediaSession
+        // 1. Verifica se há mídia em estado PLAYING
         if (controllers != null) {
             for (MediaController controller : controllers) {
                 PlaybackState state = controller.getPlaybackState();
@@ -64,22 +53,25 @@ public class VideoStateMonitor {
             }
         }
 
-        // 2. Verifica se o áudio está ativo (Redundância de segurança)
-        boolean audioActive = mAudioManager.isMusicActive();
+        // 2. Verifica se o áudio está ativo
+        boolean audioActive = mAudioManager != null && mAudioManager.isMusicActive();
 
-        // 3. Verifica FLAG_KEEP_SCREEN_ON (Crucial para distinguir Vídeo de Áudio puro)
-        // Isso requer acesso ao WindowState focado no WMS.
-        boolean keepScreenOn = mWms.mRoot.getDisplayContent(0).mCurrentFocus != null &&
-                               mWms.mRoot.getDisplayContent(0).mCurrentFocus.mAttrs.flags 
-                               & android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON != 0;
+        // 3. Verifica FLAG_KEEP_SCREEN_ON (Diferencia vídeo de música)
+        boolean keepScreenOn = false;
+        synchronized (mWms.mGlobalLock) {
+            DisplayContent dc = mWms.mRoot.getDisplayContent(DEFAULT_DISPLAY);
+            if (dc != null && dc.mCurrentFocus != null) {
+                keepScreenOn = (dc.mCurrentFocus.mAttrs.flags 
+                        & WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0;
+            }
+        }
 
-        // Decisão final
         boolean newState = mediaPlaying && audioActive && keepScreenOn;
 
         if (mIsVideoPlaying != newState) {
             mIsVideoPlaying = newState;
-            // Notifica o DisplayRotation para reavaliar a orientação imediatamente
-            mWms.updateRotation(false, false);
+            // Solicita a atualização da rotação via Handler para sair do contexto de callback de mídia
+            mWms.mH.post(() -> mWms.updateRotation(false, false));
         }
     }
 
