@@ -4,11 +4,12 @@
 MODS_DIR="."
 
 # Caminho para a raiz do código AOSP
-AOSP_DIR="$HOME/aosp"
+AOSP_DIR="$HOME/android/lineage"
 
 # Arquivos que não vão ser passados para o AOSP
 EXCLUDES=(
     "--exclude=.git"
+    "--exclude=README.md"
     "--exclude=push_to_aosp.sh"
     "--exclude=pull_from_aosp.sh"
     "--exclude=hard_reset.sh"

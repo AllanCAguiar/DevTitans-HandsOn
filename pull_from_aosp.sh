@@ -4,7 +4,7 @@
 MODS_DIR="."
 
 # Caminho para a raiz do código AOSP
-AOSP_DIR="$HOME/aosp"
+AOSP_DIR="$HOME/android/lineage"
 
 # Arquivos que devem ser ignorados na volta
 EXCLUDES=(

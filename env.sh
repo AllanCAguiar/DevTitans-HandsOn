@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd ~/aosp
+cd ~/android/lineage
 source build/envsetup.sh
-lunch devtitans_kraken-eng
+breakfast nio
