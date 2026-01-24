@@ -27,7 +27,7 @@ echo "ATENÇÃO: Copiando do AOSP ($AOSP_DIR) para REPO ($MODS_DIR)"
 echo "Apenas arquivos que JÁ EXISTEM no seu repositório serão atualizados."
 echo "-----------------------------------------------------"
 
-rsync -avh --progress --existing --update "${EXCLUDES[@]}" "$AOSP_DIR/" "$MODS_DIR/"
+rsync -avh --progress --existing "${EXCLUDES[@]}" "$AOSP_DIR/" "$MODS_DIR/"
 
 echo "Sincronização reversa concluída."
 
