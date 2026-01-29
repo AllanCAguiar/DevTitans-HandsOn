@@ -1,0 +1,279 @@
+[ 51% 348/682] //frameworks/base/services/core:services.core.unboosted turbine [common]
+FAILED: out/soong/.intermediates/frameworks/base/services/core/services.core.unboosted/android_common/turbine/services.core.unboosted.jar
+prebuilts/jdk/jdk17/linux-x86/bin/java -XX:OnError="cat hs_err_pid%p.log" -XX:CICompilerCount=6 -XX:+UseDynamicNumberOfGCThreads -jar out/host/linux-x86/framework/turbine.jar --output out/soong/.intermediates/frameworks/base/services/core/services.core.unboosted/android_common/turbine/services.core.unboosted.jar.tmp --sources @out/soong/.intermediates/frameworks/base/services/core/services.core.unboosted/android_common/turbine/services.core.unboosted.jar.rsp  --source_jars out/soong/.intermediates/frameworks/base/services/core/services.core.protologsrc/gen/services.core.protolog.srcjar out/soong/.intermediates/frameworks/base/services/core/xsd/platform-compat-config/gen/java/com_android_server_compat_config_xsdcgen.srcjar out/soong/.intermediates/frameworks/base/services/core/xsd/platform-compat-overrides/gen/java/com_android_server_compat_overrides_xsdcgen.srcjar out/soong/.intermediates/frameworks/base/services/core/xsd/display-device-config/gen/java/com_android_server_display_config_xsdcgen.srcjar out/soong/.intermediates/frameworks/base/services/core/xsd/display-layout-config/gen/java/com_android_server_display_config_layout_xsdcgen.srcjar out/soong/.intermediates/frameworks/base/services/core/xsd/device-state-config/gen/java/com_android_server_policy_devicestate_config_xsdcgen.srcjar out/soong/.intermediates/frameworks/base/services/core/services.core.unboosted/android_common/gen/aidl/aidl0.srcjar --javacopts -Xmaxerrs 9999999 -encoding UTF-8 -sourcepath "" -g -XDskipDuplicateBridges=true -XDstringConcat=inline -J--add-modules=jdk.compiler -J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED -Xlint:-dep-ann -source 17 -target 17 -- --system out/soong/.intermediates/build/soong/java/core-libraries/legacy-core-platform-api-stubs-system-modules/android_common/system --classpath out/soong/.intermediates/frameworks/base/ext/android_common/turbine-combined/ext.jar out/soong/.intermediates/frameworks/base/framework/android_common/turbine-combined/framework.jar out/soong/.intermediates/frameworks/base/services/net/services.net/android_common/turbine-combined/services.net.jar out/soong/.intermediates/hardware/interfaces/common/aidl/android.hardware.common-V2-java/android_common/turbine-combined/android.hardware.common-V2-java.jar out/soong/.intermediates/hardware/interfaces/light/2.0/android.hardware.light-V2.0-java/android_common/turbine-combined/android.hardware.light-V2.0-java.jar out/soong/.intermediates/hardware/interfaces/gnss/aidl/android.hardware.gnss-V2-java/android_common/turbine-combined/android.hardware.gnss-V2-java.jar out/soong/.intermediates/hardware/interfaces/vibrator/aidl/android.hardware.vibrator-V2-java/android_common/turbine-combined/android.hardware.vibrator-V2-java.jar out/soong/.intermediates/tools/platform-compat/java/android/compat/annotation/app-compat-annotations/android_common/turbine-combined/app-compat-annotations.jar out/soong/.intermediates/packages/modules/Connectivity/Tethering/common/TetheringLib/framework-tethering.stubs.module_lib/android_common/turbine-combined/framework-tethering.stubs.module_lib.jar out/soong/.intermediates/art/libartservice/service/service-art.stubs.system_server/android_common/turbine-combined/service-art.stubs.system_server.jar out/soong/.intermediates/packages/modules/Permission/service/service-permission.stubs.system_server/android_common/turbine-combined/service-permission.stubs.system_server.jar out/soong/.intermediates/packages/modules/RemoteKeyProvisioning/system-server/service-rkp.stubs.system_server/android_common/turbine-combined/service-rkp.stubs.system_server.jar out/soong/.intermediates/packages/modules/AdServices/sdksandbox/service/service-sdksandbox.stubs.system_server/android_common/turbine-combined/service-sdksandbox.stubs.system_server.jar out/soong/.intermediates/frameworks/hardware/interfaces/location/altitude/aidl/android.frameworks.location.altitude-V1-java/android_common/turbine-combined/android.frameworks.location.altitude-V1-java.jar out/soong/.intermediates/hardware/interfaces/authsecret/1.0/android.hardware.authsecret-V1.0-java/android_common/turbine-combined/android.hardware.authsecret-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/authsecret/aidl/android.hardware.authsecret-V1-java/android_common/turbine-combined/android.hardware.authsecret-V1-java.jar out/soong/.intermediates/hardware/interfaces/boot/1.0/android.hardware.boot-V1.0-java/android_common/turbine-combined/android.hardware.boot-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/boot/1.1/android.hardware.boot-V1.1-java/android_common/turbine-combined/android.hardware.boot-V1.1-java.jar out/soong/.intermediates/hardware/interfaces/boot/1.2/android.hardware.boot-V1.2-java/android_common/turbine-combined/android.hardware.boot-V1.2-java.jar out/soong/.intermediates/hardware/interfaces/boot/aidl/android.hardware.boot-V1-java/android_common/turbine-combined/android.hardware.boot-V1-java.jar out/soong/.intermediates/hardware/interfaces/broadcastradio/2.0/android.hardware.broadcastradio-V2.0-java/android_common/turbine-combined/android.hardware.broadcastradio-V2.0-java.jar out/soong/.intermediates/hardware/interfaces/broadcastradio/aidl/android.hardware.broadcastradio-V1-java/android_common/turbine-combined/android.hardware.broadcastradio-V1-java.jar out/soong/.intermediates/hardware/interfaces/health/1.0/android.hardware.health-V1.0-java/android_common/turbine-combined/android.hardware.health-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/health/2.0/android.hardware.health-V2.0-java/android_common/turbine-combined/android.hardware.health-V2.0-java.jar out/soong/.intermediates/hardware/interfaces/health/2.1/android.hardware.health-V2.1-java/android_common/turbine-combined/android.hardware.health-V2.1-java.jar out/soong/.intermediates/hardware/interfaces/health/aidl/android.hardware.health-V2-java/android_common/turbine-combined/android.hardware.health-V2-java.jar out/soong/.intermediates/hardware/interfaces/health/aidl/android.hardware.health-translate-java/android_common/turbine-combined/android.hardware.health-translate-java.jar out/soong/.intermediates/hardware/interfaces/light/aidl/android.hardware.light-V1-java/android_common/turbine-combined/android.hardware.light-V1-java.jar out/soong/.intermediates/hardware/interfaces/security/rkp/aidl/android.hardware.security.rkp-V3-java/android_common/turbine-combined/android.hardware.security.rkp-V3-java.jar out/soong/.intermediates/hardware/interfaces/tv/cec/1.1/android.hardware.tv.cec-V1.1-java/android_common/turbine-combined/android.hardware.tv.cec-V1.1-java.jar out/soong/.intermediates/hardware/interfaces/tv/hdmi/cec/aidl/android.hardware.tv.hdmi.cec-V1-java/android_common/turbine-combined/android.hardware.tv.hdmi.cec-V1-java.jar out/soong/.intermediates/hardware/interfaces/tv/hdmi/connection/aidl/android.hardware.tv.hdmi.connection-V1-java/android_common/turbine-combined/android.hardware.tv.hdmi.connection-V1-java.jar out/soong/.intermediates/hardware/interfaces/tv/hdmi/earc/aidl/android.hardware.tv.hdmi.earc-V1-java/android_common/turbine-combined/android.hardware.tv.hdmi.earc-V1-java.jar out/soong/.intermediates/hardware/interfaces/weaver/1.0/android.hardware.weaver-V1.0-java/android_common/turbine-combined/android.hardware.weaver-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/weaver/aidl/android.hardware.weaver-V2-java/android_common/turbine-combined/android.hardware.weaver-V2-java.jar out/soong/.intermediates/hardware/interfaces/biometrics/face/1.0/android.hardware.biometrics.face-V1.0-java/android_common/turbine-combined/android.hardware.biometrics.face-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/biometrics/fingerprint/2.3/android.hardware.biometrics.fingerprint-V2.3-java/android_common/turbine-combined/android.hardware.biometrics.fingerprint-V2.3-java.jar out/soong/.intermediates/hardware/interfaces/oemlock/1.0/android.hardware.oemlock-V1.0-java/android_common/turbine-combined/android.hardware.oemlock-V1.0-java.jar out/soong/.intermediates/hardware/interfaces/oemlock/aidl/android.hardware.oemlock-V1-java/android_common/turbine-combined/android.hardware.oemlock-V1-java.jar out/soong/.intermediates/hardware/interfaces/configstore/1.1/android.hardware.configstore-V1.1-java/android_common/turbine-combined/android.hardware.configstore-V1.1-java.jar out/soong/.intermediates/hardware/interfaces/ir/aidl/android.hardware.ir-V1-java/android_common/turbine-combined/android.hardware.ir-V1-java.jar out/soong/.intermediates/hardware/interfaces/rebootescrow/aidl/android.hardware.rebootescrow-V1-java/android_common/turbine-combined/android.hardware.rebootescrow-V1-java.jar out/soong/.intermediates/hardware/interfaces/power/stats/aidl/android.hardware.power.stats-V2-java/android_common/turbine-combined/android.hardware.power.stats-V2-java.jar out/soong/.intermediates/hardware/interfaces/power/aidl/android.hardware.power-V4-java/android_common/turbine-combined/android.hardware.power-V4-java.jar out/soong/.intermediates/system/libhidl/transport/manager/1.2/android.hidl.manager-V1.2-java/android_common/turbine-combined/android.hidl.manager-V1.2-java.jar out/soong/.intermediates/external/cbor-java/cbor-java/android_common/turbine-combined/cbor-java.jar out/soong/.intermediates/external/icu/icu4j/icu4j_calendar_astronomer/android_common/turbine-combined/icu4j_calendar_astronomer.jar out/soong/.intermediates/frameworks/libs/net/client-libs/netd-client/android_common/turbine-combined/netd-client.jar out/soong/.intermediates/frameworks/base/cmds/idmap2/overlayable_policy_aidl-java/android_common/turbine-combined/overlayable_policy_aidl-java.jar out/soong/.intermediates/frameworks/native/services/surfaceflinger/sysprop/SurfaceFlingerProperties/android_common/turbine-combined/SurfaceFlingerProperties.jar out/soong/.intermediates/frameworks/base/core/sysprop/com.android.sysprop.watchdog/android_common/turbine-combined/com.android.sysprop.watchdog.jar out/soong/.intermediates/frameworks/base/tools/processors/immutability/ImmutabilityAnnotation/android_common/turbine-combined/ImmutabilityAnnotation.jar out/soong/.intermediates/frameworks/base/libs/securebox/securebox/android_common/turbine-combined/securebox.jar && (for o in out/soong/.intermediates/frameworks/base/services/core/services.core.unboosted/android_common/turbine/services.core.unboosted.jar; do if cmp -s ${o}.tmp ${o} ; then rm ${o}.tmp ; else mv ${o}.tmp ${o} ; fi; done )
+frameworks/base/services/core/java/com/android/server/wm/ActivityRecord.java:401: error: symbol not found com.android.server.wm.WindowManagerService$AppFreezeListener
+final class ActivityRecord extends WindowToken implements WindowManagerService.AppFreezeListener {
+                                                                               ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1880: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+        boolean isDeviceInPosture(DeviceStateController.DeviceStateEnum state, boolean isTabletop) {
+                                                        ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1890: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+        DeviceStateController.DeviceStateEnum getFoldState() {
+                              ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1926: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+        void foldStateChanged(DeviceStateController.DeviceStateEnum newState) {
+                                                    ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1763: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+        private DeviceStateController.DeviceStateEnum mDeviceStateEnum =
+                                      ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:2182: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+            final DeviceStateController.DeviceStateEnum mDeviceStateEnum;
+                                        ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1636: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+    boolean isDeviceInPosture(DeviceStateController.DeviceStateEnum state, boolean isTabletop) {
+                                                    ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1651: error: symbol not found com.android.server.wm.DeviceStateController$DeviceStateEnum
+    void foldStateChanged(DeviceStateController.DeviceStateEnum deviceStateEnum) {
+                                                ^
+frameworks/base/services/core/java/com/android/server/wm/DisplayRotation.java:1718: error: could not resolve DeviceStateAutoRotateSettingController
+    static DeviceStateAutoRotateSettingController createDeviceStateAutoRotateDependencies(
+           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:203: error: symbol not found android.hardware.devicestate.DeviceState
+import android.hardware.devicestate.DeviceState;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1107: error: could not resolve DeviceState
+        public void onDeviceStateChanged(@NonNull DeviceState state) {
+                                                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1105: error: could not resolve DeviceState
+        private DeviceState mCurrentDeviceState;
+                ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:8501: error: could not resolve OnImeRequestedChangedListener
+                OnImeRequestedChangedListener listener) {
+                ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:330: error: symbol not found android.window.ScreenCaptureInternal
+import android.window.ScreenCaptureInternal;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9030: error: could not resolve ScreenCaptureInternal.CaptureArgs
+                @Nullable ScreenCaptureInternal.CaptureArgs captureArgs,
+                          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9031: error: could not resolve ScreenCaptureInternal.ScreenCaptureListener
+                ScreenCaptureInternal.ScreenCaptureListener listener) {
+                ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:140: error: symbol not found com.android.server.wm.SensitiveContentPackages.PackageInfo
+import static com.android.server.wm.SensitiveContentPackages.PackageInfo;
+              ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9069: error: could not resolve PackageInfo
+        public void addBlockScreenCaptureForApps(ArraySet<PackageInfo> packageInfos) {
+                                                          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9103: error: could not resolve PackageInfo
+        public void removeBlockScreenCaptureForApps(ArraySet<PackageInfo> packageInfos) {
+                                                             ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9136: error: could not resolve WindowFocusChangeListener
+        public void registerWindowFocusChangeListener(WindowFocusChangeListener listener) {
+                                                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9141: error: could not resolve WindowFocusChangeListener
+        public void unregisterWindowFocusChangeListener(WindowFocusChangeListener listener) {
+                                                        ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9146: error: could not resolve OnWindowRemovedListener
+        public void registerOnWindowRemovedListener(OnWindowRemovedListener listener) {
+                                                    ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9153: error: could not resolve OnWindowRemovedListener
+        public void unregisterOnWindowRemovedListener(OnWindowRemovedListener listener) {
+                                                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:331: error: symbol not found android.window.ScreenCaptureInternal.ScreenshotHardwareBuffer
+import android.window.ScreenCaptureInternal.ScreenshotHardwareBuffer;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9181: error: could not resolve ScreenshotHardwareBuffer
+        public ScreenshotHardwareBuffer takeAssistScreenshot() {
+               ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9188: error: could not resolve ScreenshotHardwareBuffer
+        public ScreenshotHardwareBuffer takeContextualSearchScreenshot(int uid, int displayId) {
+               ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:319: error: symbol not found android.window.ConfigurationChangeSetting
+import android.window.ConfigurationChangeSetting;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10950: error: could not resolve ConfigurationChangeSetting.ConfigurationChangeSettingInternal
+            ConfigurationChangeSetting.ConfigurationChangeSettingInternal {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10965: error: could not resolve ConfigurationChangeSetting.DensitySetting
+        private final class DensitySettingImpl extends ConfigurationChangeSetting.DensitySetting {
+                                                       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10978: error: could not resolve ConfigurationChangeSetting.FontScaleSetting
+                ConfigurationChangeSetting.FontScaleSetting {
+                ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10953: error: could not resolve ConfigurationChangeSetting
+        public ConfigurationChangeSetting createImplFromParcel(
+               ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10954: error: could not resolve ConfigurationChangeSetting.SettingType
+                @ConfigurationChangeSetting.SettingType int settingType, @NonNull Parcel in) {
+                ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1284: error: could not resolve AppCompatConfiguration
+            @NonNull final AppCompatConfiguration appCompat) {
+                           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1316: error: could not resolve AppCompatConfiguration
+            @NonNull AppCompatConfiguration appCompat) {
+                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:311: error: symbol not found android.view.WindowRelayoutResult
+import android.view.WindowRelayoutResult;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1636: error: could not resolve WindowRelayoutResult
+            InputChannel outInputChannel, WindowRelayoutResult result) {
+                                          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1988: error: could not resolve WindowRelayoutResult
+            @NonNull WindowRelayoutResult result) {
+                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:2397: error: symbol not found android.view.View$RectangleOnScreenRequestSource
+            @View.RectangleOnScreenRequestSource int source) {
+                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:2454: error: could not resolve WindowRelayoutResult
+            int syncSeqId, WindowRelayoutResult outRelayoutResult,
+                           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:338: error: symbol not found android.window.WindowContextInfo
+import android.window.WindowContextInfo;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:3108: error: could not resolve WindowContextInfo
+    public WindowContextInfo attachWindowContextToDisplayArea(@NonNull IApplicationThread appThread,
+           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:3148: error: could not resolve WindowContextInfo
+    public WindowContextInfo attachWindowContextToDisplayContent(
+           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:3187: error: could not resolve WindowContextInfo
+    public WindowContextInfo attachWindowContextToWindowToken(@NonNull IApplicationThread appThread,
+           ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:4546: error: could not resolve ScreenshotHardwareBuffer
+    private ScreenshotHardwareBuffer takeAssistScreenshot(
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:4619: error: could not resolve ScreenCaptureInternal.LayerCaptureArgs.Builder
+            @NonNull ScreenCaptureInternal.LayerCaptureArgs.Builder layerCaptureArgsBuilder) {
+                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:267: error: symbol not found android.view.IDecorViewGestureListener
+import android.view.IDecorViewGestureListener;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:5259: error: could not resolve IDecorViewGestureListener
+            IDecorViewGestureListener listener, int displayId) {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:5278: error: could not resolve IDecorViewGestureListener
+            IDecorViewGestureListener listener, int displayId) {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:5721: error: could not resolve WindowFocusChangeListener
+    void addWindowFocusChangeListener(WindowFocusChangeListener listener) {
+                                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:5727: error: could not resolve WindowFocusChangeListener
+    void removeWindowFocusChangeListener(WindowFocusChangeListener listener) {
+                                         ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:6673: error: could not resolve ConfigurationChangeSetting
+            @NonNull List<ConfigurationChangeSetting> settings, int userId) {
+                          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:7147: error: could not resolve WindowTracingLogLevel
+    void dumpDebugLocked(ProtoOutputStream proto, @WindowTracingLogLevel int logLevel) {
+                                                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:328: error: symbol not found android.window.InputTransferToken
+import android.window.InputTransferToken;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9713: error: could not resolve InputTransferToken
+            @Nullable InputTransferToken hostInputTransferToken, int flags, int privateFlags,
+                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9714: error: could not resolve InputTransferToken
+            int inputFeatures, int type, IBinder windowToken, InputTransferToken inputTransferToken,
+                                                              ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9742: error: could not resolve InputTransferToken
+    public boolean transferTouchGesture(@NonNull InputTransferToken transferFromToken,
+                                                 ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9743: error: could not resolve InputTransferToken
+            @NonNull InputTransferToken transferToToken) {
+                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:9837: error: could not resolve InputTransferToken
+            @Nullable InputTransferToken hostInputTransferToken, int displayId,
+                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10210: error: could not resolve InputTransferToken
+    void grantEmbeddedWindowFocus(Session session, InputTransferToken inputTransferToken,
+                                                   ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10260: error: could not resolve InputTransferToken
+            InputTransferToken inputTransferToken, boolean grantFocus) {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10570: error: could not resolve ScreenCaptureInternal.CaptureArgs
+            @Nullable ScreenCaptureInternal.CaptureArgs captureArgs,
+                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10571: error: could not resolve ScreenCaptureInternal.ScreenCaptureListener
+            ScreenCaptureInternal.ScreenCaptureListener listener) {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10590: error: symbol not found android.window.ScreenCapture$ScreenCaptureParams
+            @NonNull ScreenCapture.ScreenCaptureParams params,
+                                   ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:323: error: symbol not found android.window.IScreenCaptureCallback
+import android.window.IScreenCaptureCallback;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10591: error: could not resolve IScreenCaptureCallback
+            @NonNull IScreenCaptureCallback callback) {
+                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10657: error: could not resolve ScreenCaptureInternal.LayerCaptureArgs
+    ScreenCaptureInternal.LayerCaptureArgs getCaptureArgs(
+    ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10658: error: could not resolve ScreenCaptureInternal.CaptureArgs
+            int displayId, @Nullable ScreenCaptureInternal.CaptureArgs captureArgs) {
+                                     ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:327: error: symbol not found android.window.ITrustedPresentationListener
+import android.window.ITrustedPresentationListener;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10838: error: could not resolve ITrustedPresentationListener
+            ITrustedPresentationListener listener,
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:336: error: symbol not found android.window.TrustedPresentationThresholds
+import android.window.TrustedPresentationThresholds;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10839: error: could not resolve TrustedPresentationThresholds
+            TrustedPresentationThresholds thresholds, int id) {
+            ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10844: error: could not resolve ITrustedPresentationListener
+    public void unregisterTrustedPresentationListener(ITrustedPresentationListener listener,
+                                                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:324: error: symbol not found android.window.IScreenRecordingCallback
+import android.window.IScreenRecordingCallback;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10851: error: could not resolve IScreenRecordingCallback
+    public boolean registerScreenRecordingCallback(IScreenRecordingCallback callback) {
+                                                   ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10858: error: could not resolve IScreenRecordingCallback
+    public void unregisterScreenRecordingCallback(IScreenRecordingCallback callback) {
+                                                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:322: error: symbol not found android.window.IGlobalDragListener
+import android.window.IGlobalDragListener;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10871: error: could not resolve IGlobalDragListener
+    public void setGlobalDragListener(IGlobalDragListener listener) throws RemoteException {
+                                      ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:497: error: could not resolve OnWindowRemovedListener
+    private final List<OnWindowRemovedListener> mOnWindowRemovedListeners = new ArrayList<>();
+                       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:511: error: could not resolve WindowInteractionTracker
+    WindowInteractionTracker mInteractionTracker = new WindowInteractionTracker(
+    ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:523: error: could not resolve PresentationController
+    final PresentationController mPresentationController;
+          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:611: error: could not resolve WindowManagerFlags
+    final WindowManagerFlags mFlags;
+          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:801: error: symbol not found com.android.server.wm.WindowManagerInternal$OnImeRequestedChangedListener
+    WindowManagerInternal.OnImeRequestedChangedListener mOnImeRequestedChangedListener;
+                          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:824: error: could not resolve TrustedPresentationListenerController
+    final TrustedPresentationListenerController mTrustedPresentationListenerController =
+          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1126: error: could not resolve SharedMemoryBackedCurrentAnimatorScale
+    private final SharedMemoryBackedCurrentAnimatorScale mAnimatorScale =
+                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1130: error: could not resolve AppCompatConfiguration
+    final AppCompatConfiguration mAppCompatConfiguration;
+          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1169: error: could not resolve WindowFocusChangeListener
+    final ArrayList<WindowFocusChangeListener> mWindowFocusChangeListeners = new ArrayList<>();
+                    ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:332: error: symbol not found android.window.SystemPerformanceHinter
+import android.window.SystemPerformanceHinter;
+       ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1201: error: could not resolve SystemPerformanceHinter
+    SystemPerformanceHinter mSystemPerformanceHinter;
+    ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1207: error: could not resolve SensitiveContentPackages
+    final SensitiveContentPackages mSensitiveContentPackages = new SensitiveContentPackages();
+          ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:1250: error: could not resolve ScreenRecordingCallbackController
+    private final ScreenRecordingCallbackController mScreenRecordingCallbackController;
+                  ^
+frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java:10849: error: could not resolve field DETECT_SCREEN_RECORDING
+    @EnforcePermission(android.Manifest.permission.DETECT_SCREEN_RECORDING)
+                       ^
+20:49:32 ninja failed with: exit status 1
+
+#### failed to build some targets (13:20 (mm:ss)) ####

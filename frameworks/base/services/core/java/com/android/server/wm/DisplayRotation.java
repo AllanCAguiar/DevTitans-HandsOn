@@ -557,6 +557,27 @@ public class DisplayRotation {
                     Surface.rotationToString(prevRotation));
         }
 
+        boolean isVideoContext = mService.mVideoStateMonitor.isVideoPlaying();
+
+        if (isFixedToUserRotation()) {
+            return mUserRotation;
+        }
+    
+        // ... lógica de sensorRotation ...
+    
+        // MODIFICAÇÃO CONTEXTUAL:
+        // Se um vídeo estiver em execução e a orientação da App for "neutral" 
+        // (UNSPECIFIED ou USER), ignoramos a trava de rotação do usuário 
+        // e seguimos o sensor.
+        if (isVideoContext && (orientation == ActivityInfo.SCREEN_ORIENTATION_USER 
+                || orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)) {
+            
+            if (sensorRotation >= 0) {
+                // Se o sensor detectou uma mudança (ex: virou para o lado), use-a
+                return sensorRotation;
+            }
+        }
+
         if (DisplayRotationCoordinator.isSecondaryInternalDisplay(mDisplayContent)
                 && mDeviceStateController
                         .shouldMatchBuiltInDisplayOrientationToReverseDefaultDisplay()) {
@@ -1007,27 +1028,30 @@ public class DisplayRotation {
      * screen is switched off.
      */
     private boolean needSensorRunning() {
+        // 1. Restrições de Hardware (Carro/TV ou Sensores desativados por dobra)
         if (isFixedToUserRotation()) {
-            // We are sure we only respect user rotation settings, so we are sure we will not
-            // support sensor rotation.
             return false;
         }
-
         if (mFoldController != null && mFoldController.shouldDisableRotationSensor()) {
             return false;
         }
 
+        // 2. ROTAÇÃO CONTEXTUAL: Força o sensor se houver vídeo, mesmo com rotação travada
+        if (mService.mVideoStateMonitor.isVideoPlaying()) {
+            return true;
+        }
+
+        // 3. Preferências do App (Se o app pediu especificamente por sensores)
         if (mSupportAutoRotation) {
             if (mCurrentAppOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR
                     || mCurrentAppOrientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
                     || mCurrentAppOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
                     || mCurrentAppOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
-                // If the application has explicitly requested to follow the
-                // orientation, then we need to turn the sensor on.
                 return true;
             }
         }
 
+        // 4. Modo Dock (Carro ou Mesa)
         final int dockMode = mDisplayPolicy.getDockMode();
         if ((mDisplayPolicy.isCarDockEnablesAccelerometer()
                 && dockMode == Intent.EXTRA_DOCK_STATE_CAR)
@@ -1035,26 +1059,16 @@ public class DisplayRotation {
                         && (dockMode == Intent.EXTRA_DOCK_STATE_DESK
                                 || dockMode == Intent.EXTRA_DOCK_STATE_LE_DESK
                                 || dockMode == Intent.EXTRA_DOCK_STATE_HE_DESK))) {
-            // Enable accelerometer if we are docked in a dock that enables accelerometer
-            // orientation management.
             return true;
         }
 
+        // 5. Comportamento quando a Rotação está Travada (Locked)
         if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
-            // If the setting for using the sensor by default is enabled, then
-            // we will always leave it on.  Note that the user could go to
-            // a window that forces an orientation that does not use the
-            // sensor and in theory we could turn it off... however, when next
-            // turning it on we won't have a good value for the current
-            // orientation for a little bit, which can cause orientation
-            // changes to lag, so we'd like to keep it always on.  (It will
-            // still be turned off when the screen is off.)
-
-            // When locked we can provide rotation suggestions users can approve to change the
-            // current screen rotation. To do this the sensor needs to be running.
             return mSupportAutoRotation &&
                     mShowRotationSuggestions == Settings.Secure.SHOW_ROTATION_SUGGESTIONS_ENABLED;
         }
+
+        // 6. Default
         return mSupportAutoRotation;
     }
 

@@ -410,6 +410,9 @@ public class WindowManagerService extends IWindowManager.Stub
     private static final String TAG = TAG_WITH_CLASS_NAME ? "WindowManagerService" : TAG_WM;
     private static final int TRACE_MAX_SECTION_NAME_LENGTH = 127;
 
+    final VideoStateMonitor mVideoStateMonitor;
+
+
     static final int LAYOUT_REPEAT_THRESHOLD = 4;
 
     /** The maximum length we will accept for a loaded animation duration:
@@ -1315,6 +1318,9 @@ public class WindowManagerService extends IWindowManager.Stub
         mGlobalLock = atm.getGlobalLock();
         mAtmService = atm;
         mContext = context;
+        
+        mVideoStateMonitor = new VideoStateMonitor(context, this);
+
         mFlags = new WindowManagerFlags();
         mIsPc = mContext.getPackageManager().hasSystemFeature(FEATURE_PC);
         mAlwaysSeqId = mContext.getPackageManager().hasSystemFeature(FEATURE_WATCH)
@@ -1340,6 +1346,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 com.android.internal.R.bool.config_assistantOnTopOfDream);
         mSkipActivityRelaunchWhenDocking = context.getResources()
                 .getBoolean(R.bool.config_skipActivityRelaunchWhenDocking);
+
+
 
         mAppCompatConfiguration = appCompat;
 
@@ -5927,6 +5935,7 @@ public class WindowManagerService extends IWindowManager.Stub
     public void systemReady() {
         mSystemReady = true;
         mPolicy.systemReady();
+        mVideoStateMonitor.onSystemReady(); 
         mRoot.forAllDisplayPolicies(DisplayPolicy::systemReady);
         mSnapshotController.systemReady();
         UiThread.getHandler().post(mSettingsObserver::loadSettings);
