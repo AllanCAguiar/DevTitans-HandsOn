@@ -23,6 +23,8 @@ import static com.android.systemui.statusbar.policy.RotationLockControllerImpl.h
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.ContentResolver;
+
 import android.hardware.SensorPrivacyManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -132,9 +134,26 @@ public class RotationLockTile extends QSTileImpl<BooleanState> implements
 
     @Override
     protected void handleClick(@Nullable View view) {
-        final boolean newState = !mState.value;
-        mController.setRotationLocked(!newState);
-        refreshState(newState);
+        ContentResolver resolver = mContext.getContentResolver();
+
+        int currentMode = Settings.System.getInt(resolver,"custom_rotation_mode", 0);
+
+        int nextMode = (currentMode + 1) % 3;
+
+        Settings.System.putInt(resolver, "custom_rotation_mode", nextMode);
+
+        if (nextMode == 0){
+            // Modo Auto-Rotação
+            mController.setRotationLocked(false);
+
+        }else if(nextMode == 1){
+            // Modo Auto-Rotação
+            mController.setRotationLocked(true);
+        }else{
+            // Modo Rotação contextual
+            mController.setRotationLocked(true);
+        }
+        refreshState();
     }
 
     @Override
@@ -144,6 +163,7 @@ public class RotationLockTile extends QSTileImpl<BooleanState> implements
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        int currentMode = Settings.System.getInt(mContext.getContentResolver(),"custom_rotation_mode",0);
         final boolean rotationLocked = mController.isRotationLocked();
 
         final boolean powerSave = mBatteryController.isPowerSave();
@@ -151,6 +171,43 @@ public class RotationLockTile extends QSTileImpl<BooleanState> implements
         final boolean cameraRotation = mAllowRotationResolver &&
                 !powerSave && !cameraLocked && hasSufficientPermission(mContext)
                         && mController.isCameraRotationEnabled();
+
+
+        switch (currentMode) {
+            case 0:
+                state.value = true;
+                state.label = mContext.getString(R.string.quick_settings_rotation_unlocked_label);
+                state.icon = ResourceIcon.get(R.drawable.qs_auto_rotate_icon_on);
+                state.secondaryLabel = cameraRotation?mContext.getResources().getString(R.string.rotation_lock_camera_rotation_on):EMPTY_SECONDARY_STRING;
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_rotation);
+                state.state = Tile.STATE_ACTIVE;
+                break;
+            case 1:
+                state.value = false;
+
+                state.label = "Auto-rotate";
+
+
+
+                state.icon = ResourceIcon.get(R.drawable.qs_auto_rotate_icon_off);
+                state.secondaryLabel = EMPTY_SECONDARY_STRING;
+                state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_rotation);
+                state.state = Tile.STATE_ACTIVE;
+                break;
+            case 2:
+                state.value = true;
+                state.label ="Rotação Contextual";
+                state.icon = ResourceIcon.get(com.android.internal.R.drawable.ic_menu_rotate);
+                state.secondaryLabel = "On";
+                state.contentDescription = "Rotação adaptativa";
+                state.state = Tile.STATE_ACTIVE;
+                break;
+                
+        }
+
+
+
+        /*                
         state.value = !rotationLocked;
         state.label = mContext.getString(R.string.quick_settings_rotation_unlocked_label);
         state.icon = ResourceIcon.get(R.drawable.qs_auto_rotate_icon_off);
@@ -163,6 +220,7 @@ public class RotationLockTile extends QSTileImpl<BooleanState> implements
         } else {
             state.secondaryLabel = EMPTY_SECONDARY_STRING;
         }
+        */
         state.stateDescription = state.secondaryLabel;
 
         state.expandedAccessibilityClassName = Switch.class.getName();
