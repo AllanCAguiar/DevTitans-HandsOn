@@ -15,6 +15,7 @@
  */
 
 #include <android-base/stringprintf.h>
+#include <android-base/properties.h>
 #include <batteryservice/BatteryService.h>
 #include <cutils/klog.h>
 
@@ -227,7 +228,24 @@ void HealthdDraw::draw_percent(const animation* anim) {
     LOGV("drawing percent %s %d %d\n", str.c_str(), x, y);
     gr_color(field.color_r, field.color_g, field.color_b, field.color_a);
     draw_text(field.font, x, y, str.c_str());
-    draw_text(field.font, x-150, y+900, "DevTITANS");
+}
+
+void HealthdDraw::draw_watermark(const animation* anim) {
+    if (!graphics_available) return;
+    int cur_level = anim->cur_level;
+
+    const animation::text_field& field = anim->text_percent;
+    if (field.font == nullptr || field.font->char_width == 0 || field.font->char_height == 0) {
+        return;
+    }
+    std::string str = base::StringPrintf("DevTITANS\n");
+
+    int x, y;
+    determine_xy(field, str.size(), &x, &y);
+
+    LOGV("drawing percent %s %d %d\n", str.c_str(), x, y);
+    gr_color(field.color_r, field.color_g, field.color_b, field.color_a);
+    draw_text(field.font, x, y-800, str.c_str());
 }
 
 void HealthdDraw::draw_battery(const animation* anim) {
@@ -241,6 +259,7 @@ void HealthdDraw::draw_battery(const animation* anim) {
     }
     draw_clock(anim);
     draw_percent(anim);
+    draw_watermark(anim);
 }
 
 void HealthdDraw::draw_unknown(GRSurface* surf_unknown) {
