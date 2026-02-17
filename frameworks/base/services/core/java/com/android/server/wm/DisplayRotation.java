@@ -1161,7 +1161,7 @@ public class DisplayRotation {
             return true;
         }
         // --- FIM ---
-        
+
         if (isFixedToUserRotation()) {
             // We are sure we only respect user rotation settings, so we are sure we will not
             // support sensor rotation.
@@ -2119,8 +2119,8 @@ public class DisplayRotation {
     }
 
     /**
-     * Função auxiliar PAULO V6 (Anti-Flicker & Anti-Preguiça):
-     * Verifica se o app focado tem áudio ativo, segura a tela, está visível E NÃO ESTÁ FECHANDO.
+     * Função auxiliar PAULO V7 (Shell Transition Compatible):
+     * Verifica se o app focado tem áudio ativo, segura a tela e o sistema AINDA QUER que ele seja visível.
      */
     private boolean isContextualVideoActive() {
         if (mContextualController == null || mDisplayContent.mCurrentFocus == null) {
@@ -2129,14 +2129,17 @@ public class DisplayRotation {
         
         WindowState w = mDisplayContent.mCurrentFocus;
         
-        // 1. Check básico de visibilidade
-        if (!w.isVisible()) {
+        // --- CORREÇÃO DO PISCA-PISCA (V7) ---
+        
+        // 1. Verifica se a Activity associada já recebeu ordem de fechar/esconder.
+        // Isso funciona com Shell Transitions: assim que o gesto Home começa, 
+        // mVisibleRequested vira 'false', bloqueando a rotação instantaneamente.
+        if (w.mActivityRecord != null && !w.mActivityRecord.mVisibleRequested) {
             return false;
         }
 
-        // 2. ANTI-FLICKER: Se a janela está "saindo" (fechando), pare tudo.
-        // Isso evita que a rotação seja forçada durante a animação de volta pra Home.
-        if (w.mAnimatingExit) {
+        // 2. Fallback: Se não for Activity, verifica visibilidade bruta.
+        if (!w.isVisible()) {
             return false;
         }
 
