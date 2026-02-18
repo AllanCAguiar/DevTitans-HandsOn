@@ -2119,78 +2119,60 @@ public class DisplayRotation {
     }
 
     /**
-     * Função auxiliar PAULO V13 (Animation State Check + Debug Logs):
-     * Bloqueia rotação se a janela estiver animando/pausando.
+     * Função auxiliar PAULO V15 (Input Focus Check):
+     * Adiciona verificação estrita de foco de entrada para evitar rotação durante o fechamento.
      */
     private boolean isContextualVideoActive() {
+        // 1. Checks Básicos
         if (mContextualController == null || mDisplayContent == null || mDisplayContent.mCurrentFocus == null) {
             return false;
         }
         
         WindowState w = mDisplayContent.mCurrentFocus;
         
-        // --- CHECK 1: Visibilidade Básica ---
+        // 2. Check de Visibilidade
         if (!w.isVisible()) {
             return false;
         }
 
-        // Preparar variáveis para o Log e Lógica
-        // Verificamos se o Controlador de Transição (Shell) está ativo
-        boolean inTransition = mDisplayContent.mTransitionController.inTransition();
-        boolean isCollecting = mDisplayContent.mTransitionController.isCollecting();
-        
-        // Verificamos o estado da Activity
-        boolean visRequested = (w.mActivityRecord != null && w.mActivityRecord.mVisibleRequested);
-        boolean isPausing = (w.mActivityRecord != null && w.mActivityRecord.isState(ActivityRecord.State.PAUSING));
-        boolean isResumed = (w.mActivityRecord != null && w.mActivityRecord.isState(ActivityRecord.State.RESUMED));
-        
-        // Verifica Áudio (para filtrar o log)
-        boolean isPlaying = mContextualController.isUidPlaying(w.mOwnerUid);
-
-        // --- LOG DE DIAGNÓSTICO (ATIVADO) ---
-        if (isPlaying) {
-             android.util.Log.v("SmartRot", "CHECK -> App: " + w.mOwnerUid + 
-                " | InTrans: " + inTransition + 
-                " | Collect: " + isCollecting +
-                " | VisReq: " + visRequested + 
-                " | Pausing: " + isPausing +
-                " | Resumed: " + isResumed);
+        // --- CHECK V15: Input Focus (A Bala de Prata) ---
+        // Se a janela não tem o foco de entrada (ex: usuário interagindo com navbar/gesto),
+        // não permitimos que ela dite a rotação.
+        if (!w.isFocused()) {
+             // android.util.Log.v("SmartRot", "Bloqueio: Janela perdeu o foco de entrada");
+             return false;
         }
 
-        // --- CHECK 2: Bloqueio de Gesto/Recents (Via Transition Controller) ---
-        // Se o sistema está em transição (ou coletando para iniciar uma)...
-        if (inTransition || isCollecting) {
-            // Se está em transição e o App não foi solicitado para ser visível = FECHANDO
-            if (!visRequested) {
-                 if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Transição + !VisRequested");
-                 return false;
-            }
-            
-            // O Pulo do Gato: Se está em transição e o estado é PAUSING.
-            // O gesto de swipe coloca a activity em PAUSING quase imediatamente.
-            if (isPausing) {
-                if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Transição + PAUSING (Swipe detectado)");
-                return false;
-            }
-        }
-        
-        // --- CHECK 3: Ciclo de Vida (Segurança) ---
-        // Se não está Resumed e nem Pausing (ex: Stopping, Destroying), bloqueia.
-        // Permitimos Pausing fora da transição por segurança, mas o check acima deve pegar.
-        if (w.mActivityRecord != null && !isResumed && !isPausing && !visRequested) {
-            if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Estado inválido (" + w.mActivityRecord.getState() + ")");
+        // --- CHECK 2: Bloqueio de Gesto (Via Service) ---
+        if (mService.getRecentsAnimationController() != null) {
             return false;
         }
 
-        // --- LÓGICA DE ÁUDIO E TELA ---
+        // --- CHECK 3: Transições (Refinado) ---
+        if (mDisplayContent.mTransitionController.inTransition() || mDisplayContent.mTransitionController.isCollecting()) {
+             // Se a janela faz parte da transição, assumimos instabilidade
+             if (w.inTransition()) {
+                 return false;
+             }
+             // Se a activity não pediu visibilidade, com certeza está saindo
+             if (w.mActivityRecord != null && !w.mActivityRecord.mVisibleRequested) {
+                 return false;
+             }
+        }
+
+        // --- CHECK 4: Ciclo de Vida (Segurança) ---
+        if (w.mActivityRecord != null) {
+             if (!w.mActivityRecord.isState(ActivityRecord.State.RESUMED)) {
+                 // android.util.Log.v("SmartRot", "Bloqueio: App não está RESUMED");
+                 return false;
+             }
+        }
+
+        // --- LÓGICA DE DETECÇÃO ---
+        boolean isPlaying = mContextualController.isUidPlaying(w.mOwnerUid);
         boolean isKeepScreenOn = (w.mAttrs.flags & android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0;
         
-        if (isPlaying && isKeepScreenOn) {
-            // android.util.Log.v("SmartRot", "LIBERADO: Gira, gira!");
-            return true;
-        }
-        
-        return false;
+        return isPlaying && isKeepScreenOn;
     }
 
     private class OrientationListener extends WindowOrientationListener implements Runnable {
