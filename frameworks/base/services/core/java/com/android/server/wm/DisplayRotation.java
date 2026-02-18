@@ -2119,35 +2119,78 @@ public class DisplayRotation {
     }
 
     /**
-     * Função auxiliar PAULO V7 (Shell Transition Compatible):
-     * Verifica se o app focado tem áudio ativo, segura a tela e o sistema AINDA QUER que ele seja visível.
+     * Função auxiliar PAULO V13 (Animation State Check + Debug Logs):
+     * Bloqueia rotação se a janela estiver animando/pausando.
      */
     private boolean isContextualVideoActive() {
-        if (mContextualController == null || mDisplayContent.mCurrentFocus == null) {
+        if (mContextualController == null || mDisplayContent == null || mDisplayContent.mCurrentFocus == null) {
             return false;
         }
         
         WindowState w = mDisplayContent.mCurrentFocus;
         
-        // --- CORREÇÃO DO PISCA-PISCA (V7) ---
-        
-        // 1. Verifica se a Activity associada já recebeu ordem de fechar/esconder.
-        // Isso funciona com Shell Transitions: assim que o gesto Home começa, 
-        // mVisibleRequested vira 'false', bloqueando a rotação instantaneamente.
-        if (w.mActivityRecord != null && !w.mActivityRecord.mVisibleRequested) {
-            return false;
-        }
-
-        // 2. Fallback: Se não for Activity, verifica visibilidade bruta.
+        // --- CHECK 1: Visibilidade Básica ---
         if (!w.isVisible()) {
             return false;
         }
 
-        // 3. Verifica Áudio + KeepScreenOn (Lógica V4)
+        // Preparar variáveis para o Log e Lógica
+        // Verificamos se o Controlador de Transição (Shell) está ativo
+        boolean inTransition = mDisplayContent.mTransitionController.inTransition();
+        boolean isCollecting = mDisplayContent.mTransitionController.isCollecting();
+        
+        // Verificamos o estado da Activity
+        boolean visRequested = (w.mActivityRecord != null && w.mActivityRecord.mVisibleRequested);
+        boolean isPausing = (w.mActivityRecord != null && w.mActivityRecord.isState(ActivityRecord.State.PAUSING));
+        boolean isResumed = (w.mActivityRecord != null && w.mActivityRecord.isState(ActivityRecord.State.RESUMED));
+        
+        // Verifica Áudio (para filtrar o log)
         boolean isPlaying = mContextualController.isUidPlaying(w.mOwnerUid);
+
+        // --- LOG DE DIAGNÓSTICO (ATIVADO) ---
+        if (isPlaying) {
+             android.util.Log.v("SmartRot", "CHECK -> App: " + w.mOwnerUid + 
+                " | InTrans: " + inTransition + 
+                " | Collect: " + isCollecting +
+                " | VisReq: " + visRequested + 
+                " | Pausing: " + isPausing +
+                " | Resumed: " + isResumed);
+        }
+
+        // --- CHECK 2: Bloqueio de Gesto/Recents (Via Transition Controller) ---
+        // Se o sistema está em transição (ou coletando para iniciar uma)...
+        if (inTransition || isCollecting) {
+            // Se está em transição e o App não foi solicitado para ser visível = FECHANDO
+            if (!visRequested) {
+                 if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Transição + !VisRequested");
+                 return false;
+            }
+            
+            // O Pulo do Gato: Se está em transição e o estado é PAUSING.
+            // O gesto de swipe coloca a activity em PAUSING quase imediatamente.
+            if (isPausing) {
+                if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Transição + PAUSING (Swipe detectado)");
+                return false;
+            }
+        }
+        
+        // --- CHECK 3: Ciclo de Vida (Segurança) ---
+        // Se não está Resumed e nem Pausing (ex: Stopping, Destroying), bloqueia.
+        // Permitimos Pausing fora da transição por segurança, mas o check acima deve pegar.
+        if (w.mActivityRecord != null && !isResumed && !isPausing && !visRequested) {
+            if (isPlaying) android.util.Log.v("SmartRot", "BLOQUEIO: Estado inválido (" + w.mActivityRecord.getState() + ")");
+            return false;
+        }
+
+        // --- LÓGICA DE ÁUDIO E TELA ---
         boolean isKeepScreenOn = (w.mAttrs.flags & android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0;
         
-        return isPlaying && isKeepScreenOn;
+        if (isPlaying && isKeepScreenOn) {
+            // android.util.Log.v("SmartRot", "LIBERADO: Gira, gira!");
+            return true;
+        }
+        
+        return false;
     }
 
     private class OrientationListener extends WindowOrientationListener implements Runnable {
