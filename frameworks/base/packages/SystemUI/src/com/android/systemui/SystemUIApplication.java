@@ -221,7 +221,20 @@ public class SystemUIApplication extends Application implements
         sortedStartables.putAll(mSysUIComponent.getPerUserStartables());
         startServicesIfNeeded(
                 sortedStartables, "StartServices", vendorComponent);
+        startFullscreenPlaybackTrackerIfNeeded();
+
     }
+
+    private void startFullscreenPlaybackTrackerIfNeeded() {
+        if (mFullscreenAudioPlaybackTracker != null) return;
+
+        // use application context explícito
+        mFullscreenAudioPlaybackTracker = new FullscreenAudioPlaybackTracker(getApplicationContext());
+        mFullscreenAudioPlaybackTracker.start();
+
+        Log.i(TAG, "FullscreenAudioPlaybackTracker started");
+    }
+
 
     /**
      * Ensures that all the Secondary user SystemUI services are running. If they are already
@@ -366,12 +379,6 @@ public class SystemUIApplication extends Application implements
         }
         mSysUIComponent.getInitController().executePostInitTasks();
         log.traceEnd();
-
-        //alteracao aqui PAULO
-        if (mFullscreenAudioPlaybackTracker == null) {
-            mFullscreenAudioPlaybackTracker = new FullscreenAudioPlaybackTracker(this);
-            mFullscreenAudioPlaybackTracker.start();
-        }
 
         mServicesStarted = true;
     }

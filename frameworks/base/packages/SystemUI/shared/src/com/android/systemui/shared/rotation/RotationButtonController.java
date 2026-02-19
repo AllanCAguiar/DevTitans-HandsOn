@@ -103,6 +103,12 @@ public class RotationButtonController {
     private final AccessibilityManager mAccessibilityManager;
     private final TaskStackListenerImpl mTaskStackListener;
 
+    // Auto-accept bidirecional (portrait <-> landscape) durante vídeo fullscreen
+    private long mLastAutoAcceptUptime = 0L;
+    private int mLastAutoAcceptedRotation = -1;
+    private static final long AUTO_ACCEPT_COOLDOWN_MS = 1200;
+
+
     private boolean mListenersRegistered = false;
     private boolean mRotationWatcherRegistered = false;
     private boolean mIsNavigationBarShowing;
@@ -419,6 +425,12 @@ public class RotationButtonController {
 
         int windowRotation = mWindowRotationProvider.get();
 
+        if (!PlaybackState.isPlayingFullscreenVideo()) {
+            mLastAutoAcceptedRotation = -1;
+            mLastAutoAcceptUptime = 0L;
+        }
+
+
         if (!mRotationButton.acceptRotationProposal()) {
             return;
         }
@@ -442,19 +454,8 @@ public class RotationButtonController {
             return;
         }
 
-        // 4.2: auto-aceitar quando estiver tocando vídeo fullscreen e rotação está bloqueada
-        if (PlaybackState.isPlayingFullscreenVideo()
-                && RotationPolicy.isRotationLocked(mContext)) {
-
-            Log.i(TAG, "autoAccept proposal rotation=" + rotation
-            + " windowRotation=" + windowRotation);
-
-            mLastRotationSuggestion = rotation; // reutiliza o mesmo campo do clique
-            setRotationLockedAtAngle(rotation,
-                    "RotationButtonController#autoAcceptFullscreenVideo");
-            setRotateSuggestionButtonState(false /* visible */);
-            return;
-        }
+        // Registra a última proposal válida para o tracker poder auto-aceitar no "start playing"
+        PlaybackState.recordRotationProposal(rotation, windowRotation);
 
         // Prepare to show the navbar icon by updating the icon style to change anim params
         Log.i(TAG, "onRotationProposal(rotation=" + rotation + ")");
