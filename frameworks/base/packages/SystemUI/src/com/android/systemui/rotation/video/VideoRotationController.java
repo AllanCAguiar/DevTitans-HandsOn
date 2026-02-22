@@ -79,9 +79,10 @@ public final class VideoRotationController {
                 public void onPlaybackConfigChanged(List<AudioPlaybackConfiguration> configs) {
                     final long now = SystemClock.uptimeMillis();
 
-                    for (AudioPlaybackConfiguration c : configs) {
-                        if (!c.isActive()) continue;
+                    // Quais UIDs têm vídeo ativo AGORA
+                    final android.util.SparseBooleanArray activeVideoUids = new android.util.SparseBooleanArray();
 
+                    for (AudioPlaybackConfiguration c : configs) {
                         final AudioAttributes aa = c.getAudioAttributes();
                         final int uid = c.getClientUid();
 
@@ -94,6 +95,7 @@ public final class VideoRotationController {
                                 + " flags=0x" + Integer.toHexString(aa != null ? aa.getFlags() : 0)
                                 + " piid=" + c.getPlayerInterfaceId());
 
+                        if (!c.isActive()) continue;
                         if (aa == null) continue;
                         if (uid <= 0) continue;
 
@@ -105,17 +107,24 @@ public final class VideoRotationController {
                         final boolean hasAvSync = ( (aa.getFlags() & AudioAttributes.FLAG_HW_AV_SYNC) != 0 );
 
                         // >>> IMPORTANTE: NÃO trate "UNKNOWN" como vídeo sem AV_SYNC
-                        if (!isMovie && !hasAvSync) {
-                            // não marca como vídeo
-                            continue;
-                        }
+                        if (!isMovie && !hasAvSync) continue;
 
+                        activeVideoUids.put(uid, true);
                         // agora sim marca "vídeo recente"
                         mLastMovieSeenUptime.put(uid, now);
                         Log.d(TAG, "VIDEO playback detected for uid=" + uid
                                 + " movie=" + isMovie + " av_sync=" + hasAvSync);
                     }
 
+                    // >>> AQUI É A CHAVE: se não tem vídeo ATIVO, remove o UID.
+                    // Isso mata o "grace time" ao fechar o vídeo sem sair do app.
+                    for (int i = mLastMovieSeenUptime.size() - 1; i >= 0; i--) {
+                        final int uid = mLastMovieSeenUptime.keyAt(i);
+                        if (!activeVideoUids.get(uid, false)) {
+                            mLastMovieSeenUptime.delete(uid);
+                            Log.d(TAG, "VIDEO cleared for uid=" + uid);
+                        }
+                    }
                     // Re-evaluate quickly on playback changes.
                     mMainHandler.post(VideoRotationController.this::evaluateState);
                 }
