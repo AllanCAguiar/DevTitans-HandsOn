@@ -238,7 +238,7 @@ void HealthdDraw::draw_watermark(const animation* anim) {
     if (field.font == nullptr || field.font->char_width == 0 || field.font->char_height == 0) {
         return;
     }
-    std::string str = base::StringPrintf("DevTITANS\n");
+    std::string str = base::StringPrintf("DevTITANS 2026\n");
 
     int x, y;
     determine_xy(field, str.size(), &x, &y);
