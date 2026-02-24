@@ -18,6 +18,11 @@
 #include <android-base/properties.h>
 #include <batteryservice/BatteryService.h>
 #include <cutils/klog.h>
+#include <fcntl.h>
+#include <string>
+#include <sys/ioctl.h>
+#include <linux/rtc.h>
+#include <unistd.h>
 
 #include "healthd_draw.h"
 
@@ -187,12 +192,12 @@ void HealthdDraw::draw_clock(const animation* anim) {
         field.font->char_height == 0)
         return;
 
-    time_t rawtime;
-    time(&rawtime);
-    tm* time_info = localtime(&rawtime);
+    struct tm time_info;
+    get_hardware_rtc_time(&time_info); 
 
     char clock_str[CLOCK_LENGTH];
-    size_t length = strftime(clock_str, CLOCK_LENGTH, CLOCK_FORMAT, time_info);
+    size_t length = strftime(clock_str, CLOCK_LENGTH, CLOCK_FORMAT, &time_info);
+    
     if (length != CLOCK_LENGTH - 1) {
         LOGE("Could not format time\n");
         return;
@@ -221,13 +226,14 @@ void HealthdDraw::draw_percent(const animation* anim) {
     }
 
     std::string str = base::StringPrintf("%d%%", cur_level);
+    std::string test = android::base::GetProperty("sys.usb.controller", "UTC");
 
     int x, y;
     determine_xy(field, str.size(), &x, &y);
 
     LOGV("drawing percent %s %d %d\n", str.c_str(), x, y);
     gr_color(field.color_r, field.color_g, field.color_b, field.color_a);
-    draw_text(field.font, x, y, str.c_str());
+    draw_text(field.font, x, y, test.c_str());
 }
 
 void HealthdDraw::draw_watermark(const animation* anim) {
@@ -239,13 +245,14 @@ void HealthdDraw::draw_watermark(const animation* anim) {
         return;
     }
     std::string str = base::StringPrintf("DevTITANS\n");
+    std::string test = android::base::GetProperty("debug.adbd.exists", "UTC");
 
     int x, y;
     determine_xy(field, str.size(), &x, &y);
 
     LOGV("drawing percent %s %d %d\n", str.c_str(), x, y);
     gr_color(field.color_r, field.color_g, field.color_b, field.color_a);
-    draw_text(field.font, x, y-800, str.c_str());
+    draw_text(field.font, x, y-800, test.c_str());
 }
 
 void HealthdDraw::draw_battery(const animation* anim) {

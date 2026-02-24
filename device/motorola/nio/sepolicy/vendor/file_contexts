@@ -1,0 +1,2 @@
+/vendor/bin/adbd_charger      u:object_r:vendor_file:s0
+/vendor/bin/linker64_charger  u:object_r:vendor_file:s0
