@@ -61,6 +61,10 @@ import com.android.systemui.user.ui.binder.StatusBarUserChipViewBinder;
 import com.android.systemui.user.ui.viewmodel.StatusBarUserChipViewModel;
 import com.android.systemui.util.leak.RotationUtils;
 import com.android.systemui.rotation.video.VideoRotationController;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 
 import java.util.Objects;
 
@@ -92,6 +96,41 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
      * Draw this many pixels into the left/right side of the cutout to optimally use the space
      */
     private int mCutoutSideNudge = 0;
+
+    private static final String KEY_CUSTOM_ROTATION_MODE = "custom_rotation_mode";
+    private int mLastCustomRotationMode = -1;
+
+    private final ContentObserver mCustomRotationModeObserver =
+            new ContentObserver(new Handler(Looper.getMainLooper())) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    applyCustomRotationModeForStatusBar();
+                }
+            };
+
+    private void applyCustomRotationModeForStatusBar() {
+        // Só faz sentido controlar aqui quando NÃO há navbar
+        if (mHasNavigationBar) return;
+
+        final int mode = Settings.System.getInt(
+                mContext.getContentResolver(),
+                KEY_CUSTOM_ROTATION_MODE,
+                0
+        );
+
+        if (mode == mLastCustomRotationMode) return;
+        mLastCustomRotationMode = mode;
+
+        final boolean contextual = (mode == 2);
+
+        if (mVideoRotationController != null) {
+            if (contextual) {
+                mVideoRotationController.start();
+            } else {
+                mVideoRotationController.stop();
+            }
+        }
+    }
 
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -181,8 +220,14 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         if (mRotationButtonController != null && !hasNavigationBar()) {
             mCommandQueue.addCallback(this);
         }
-        if (!mHasNavigationBar && mVideoRotationController != null) {
-            mVideoRotationController.start();
+        // ✅ em vez de start() direto, observa o modo
+        if (!mHasNavigationBar) {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(KEY_CUSTOM_ROTATION_MODE),
+                    false,
+                    mCustomRotationModeObserver
+            );
+            applyCustomRotationModeForStatusBar();
         }
     }
 
@@ -196,8 +241,11 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         if (mRotationButtonController != null && !mHasNavigationBar) {
             mCommandQueue.removeCallback(this);
         }
-        if (!mHasNavigationBar && mVideoRotationController != null) {
-            mVideoRotationController.stop();
+        if (!mHasNavigationBar) {
+            mContext.getContentResolver().unregisterContentObserver(mCustomRotationModeObserver);
+            if (mVideoRotationController != null) {
+                mVideoRotationController.stop();
+            }
         }
     }
 

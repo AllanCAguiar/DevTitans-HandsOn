@@ -95,6 +95,11 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
+
 /** */
 public class NavigationBarView extends FrameLayout {
     final static boolean DEBUG = false;
@@ -187,6 +192,42 @@ public class NavigationBarView extends FrameLayout {
     private final ContentObserver mShowCursorKeysObserver;
     private boolean mShowCursorKeys;
     private boolean mImeVisible;
+
+    private static final String KEY_CUSTOM_ROTATION_MODE = "custom_rotation_mode";
+    private int mLastCustomRotationMode = -1;
+
+    private final ContentObserver mCustomRotationModeObserver =
+            new ContentObserver(new Handler(Looper.getMainLooper())) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    applyCustomRotationMode();
+                }
+            };
+
+    private void applyCustomRotationMode() {
+        final int mode = Settings.System.getInt(
+                mContext.getContentResolver(),
+                KEY_CUSTOM_ROTATION_MODE,
+                0
+        );
+
+        if (mode == mLastCustomRotationMode) return;
+        mLastCustomRotationMode = mode;
+
+        final boolean contextual = (mode == 2);
+
+        if (mVideoRotationController != null) {
+            if (contextual) {
+                mVideoRotationController.start();
+            } else {
+                mVideoRotationController.stop();
+            }
+        }
+
+        // (opcional) se você quiser mudar ícones/visuais da navbar nesse modo
+        updateNavButtonIcons();
+        reorient();
+    }
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -1145,17 +1186,32 @@ public class NavigationBarView extends FrameLayout {
             mRotationButtonController.registerListeners(false /* registerRotationWatcher */);
         }
 
-        if (mVideoRotationController != null) {
-            mVideoRotationController.start();
-        }
+        // observa o modo do tile
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(KEY_CUSTOM_ROTATION_MODE),
+                false,
+                mCustomRotationModeObserver
+        );
 
-        updateNavButtonIcons();
-    }
+        // aplica na hora (vai start/stop conforme o modo)
+        applyCustomRotationMode();
+
+            /*
+            if (mVideoRotationController != null) {
+                mVideoRotationController.start();
+            }
+            */
+            updateNavButtonIcons();
+        }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mContext.getContentResolver().unregisterContentObserver(mShowCursorKeysObserver);
+
+        // ✅ unregister do seu modo
+        mContext.getContentResolver().unregisterContentObserver(mCustomRotationModeObserver);
+
         for (int i = 0; i < mButtonDispatchers.size(); ++i) {
             mButtonDispatchers.valueAt(i).onDestroy();
         }
