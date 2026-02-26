@@ -125,6 +125,38 @@ void HealthdDraw::clear_screen(void) {
     gr_clear();
 }
 
+static void get_hardware_rtc_time(struct tm* out_time) {
+    int fd = open("/dev/rtc0", O_RDONLY);
+    bool rtc_success = false;
+
+    if (fd != -1) {
+        struct rtc_time rt;
+        if (ioctl(fd, RTC_RD_TIME, &rt) != -1) {
+            out_time->tm_sec = rt.tm_sec;
+            out_time->tm_min = rt.tm_min;
+            out_time->tm_hour = rt.tm_hour;
+            out_time->tm_mday = rt.tm_mday;
+            out_time->tm_mon = rt.tm_mon;
+            out_time->tm_year = rt.tm_year;
+            out_time->tm_isdst = -1;
+            rtc_success = true;
+        }
+        close(fd);
+    }
+
+    if (!rtc_success) {
+        out_time->tm_sec = 0;
+        out_time->tm_min = 0;
+        out_time->tm_hour = 12;    
+        out_time->tm_mday = 1;       
+        out_time->tm_mon = 0;        
+        out_time->tm_year = 124;     
+        out_time->tm_isdst = -1;
+        
+        LOGE("RTC read failed! Using fixed fallback time 12:00\n");
+    }
+}
+
 int HealthdDraw::draw_surface_centered(GRSurface* surface) {
     if (!graphics_available) return 0;
 
