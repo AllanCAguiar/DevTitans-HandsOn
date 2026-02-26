@@ -24,6 +24,7 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 
 import java.util.List;
+import android.provider.Settings;
 
 /**
  * Follows device orientation (portrait/landscape) while:
@@ -310,6 +311,13 @@ public final class VideoRotationController {
     }
 
     private void evaluateState() {
+
+        final int mode = Settings.System.getInt(mContext.getContentResolver(),
+                "custom_rotation_mode", 0);
+        if (mode != 2) {
+            if (mArmed) restoreAndDisarm();
+            return;
+        }
 
         if (!mStarted) return;
 
